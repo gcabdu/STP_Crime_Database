@@ -60,24 +60,137 @@ function dbRun(query, params) {
  ********************************************************************/
 // GET request handler for crime codes
 app.get('/codes', (req, res) => {
-    console.log(req.query); // query object (key-value pairs after the ? in the url)
+    console.log(req.query);
+
+    let sql = 'Select * FROM Codes ORDER BY CODE';
+
+    let params = [];
+
+    //need to figure if the user entered a code value or not
     
-    res.status(200).type('json').send({}); // <-- you will need to change this
+
+    dbSelect(sql, params)
+    .then((rows) =>{
+        res.status(200).type('json').send(rows);
+        console.log(rows);
+
+    })
+    .catch((error) =>{
+        res.status(500).type('txt').send(error);
+
+    })
 });
 
 // GET request handler for neighborhoods
 app.get('/neighborhoods', (req, res) => {
-    console.log(req.query); // query object (key-value pairs after the ? in the url)
-    
-    res.status(200).type('json').send({}); // <-- you will need to change this
+    console.log(req.query);
+
+    let query = 'SELECT * FROM neighborhoods';
+    let params = [];
+
+    // Check if 'neighborhood' is present in the query parameters
+    if (req.query.hasOwnProperty('neighborhood')) {
+        query += ' WHERE neighborhood_name = ?';
+        params.push(req.query.neighborhood);
+    }
+
+    // Query the database for neighborhoods
+    dbSelect(query, params)
+        .then((rows) => {
+            res.status(200).type('json').send(rows);
+            console.log(rows);
+        })
+        .catch((error) => {
+            res.status(500).type('txt').send(error);
+        });
 });
+
+
 
 // GET request handler for crime incidents
 app.get('/incidents', (req, res) => {
-    console.log(req.query); // query object (key-value pairs after the ? in the url)
-    
-    res.status(200).type('json').send({}); // <-- you will need to change this
+    console.log(req.query); // query object (key-value pairs after the ? in the URL)
+
+    let query = 'SELECT * FROM incidents';
+    let params = [];
+
+    let count = 0;
+    let limitCount = 0;
+
+    if (req.query.hasOwnProperty('start_date')) {
+        query += " WHERE date_time >= '?' ";
+        params.push(req.query.date_time);
+        count++;
+    }
+
+    if (req.query.hasOwnProperty('end_date')) {
+        if (count > 0) {
+            query += ' AND';
+        } else {
+            query += ' WHERE';
+        }
+        query += ' date_time <= ?';
+        params.push(req.query.date_time);
+        count++;
+    }
+
+    //BETWEEN {ts '2008-12-20 00:00:00'} AND {ts '2008-12-20 23:59:59'}
+
+    if (req.query.hasOwnProperty('code')) {
+        if (count > 0) {
+            query += ' AND';
+        } else {
+            query += ' WHERE';
+        }
+        query += ' code = ?';
+        params.push(req.query.code);
+        count++;
+    }
+
+    if (req.query.hasOwnProperty('police_grid')) {
+        if (count > 0) {
+            query += ' AND';
+        } else {
+            query += ' WHERE';
+        }
+        query += ' police_grid = ?';
+        params.push(req.query.police_grid);
+        count++;
+    }
+
+    if (req.query.hasOwnProperty('neighborhood')) {
+        if (count > 0) {
+            query += ' AND';
+        } else {
+            query += ' WHERE';
+        }
+        query += ' neighborhood = ?';
+        params.push(req.query.neighborhood);
+        count++;
+    }
+
+    if (req.query.hasOwnProperty('limit')) {
+        limitCount++;
+        query += ' LIMIT ?';
+        params.push(parseInt(req.query.limit)); 
+    }
+
+    if (limitCount === 0) {
+        query += ' LIMIT 1000';
+    }
+
+    // Query the database for incidents
+    dbSelect(query, params)
+        .then((rows) => {
+            res.status(200).type('json').send(rows);
+            console.log(rows);
+        })
+        .catch((error) => {
+            res.status(500).type('txt').send(error);
+        });
 });
+
+
 
 // PUT request handler for new crime incident
 app.put('/new-incident', (req, res) => {
