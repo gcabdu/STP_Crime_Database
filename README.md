@@ -1,7 +1,13 @@
 # STP_Crime_Database
 
 ## Description
-The STP_Crime_Database project is a comprehensive solution for managing and displaying crime data through a RESTful API and a modern front-end interface. Built with Node.js and Express on the back-end and Vue.js on the front-end, this project aims to provide an efficient and user-friendly way to handle crime data. The application includes full CRUD (Create, Read, Update, Delete) operations, making it a robust platform for crime data management and analysis.
+The STP_Crime_Database project is about managing and demonstrating crime data with an amazing RESTful API and an advanced front-end. We developed our users with Node.js and Express on the predominantly back-end and Vue.js on the front-end. This project was intended to make working with crime data super easy and highly efficient. Using the CRUD methods, it makes it easy for law enforcement and researchers to manage and evaluate crime reports, incidences, and patterns. Additionally, this project ensures our tool under real-time updates and shows different visualization to assist us to respond to an incident, prevent crime. It is thus our primary aim to build efficient tools to provide evidence-based crime analysis and develop strategies to respond to and prevent criminologically.
+
+### Domain-Specific Overview
+First, crime data management helps in understanding where and when crimes happen, and what types of crimes are more frequent. Then, by collecting and analyzing this data, we find patterns; for example, certain areas may be more likely to have a lot of crime or more crimes at night. This information is essential for law enforcement to provide the necessary resources more adequately and to come up with strategies to reduce cases. By using our project, users are able to see the data trends in real-time, which makes it easier to take a glance and make a judgment.
+
+
+## Features
 
 ## Features
 - RESTful API with CRUD operations
